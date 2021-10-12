@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leon - DBZ</title>
+
+    <style>
+        body {
+            background-color: rgb(0, 0, 0);
+        }
+        #screen {
+            background-color: rgb(0, 0, 0);
+            position: absolute;
+            color: rgb(35, 233, 17);
+        }
+        #desk {
+            background-color: rgb(20, 20, 20);
+            border: inset 50px rgb(65, 60, 58);
+        }
+        #btn {
+            padding: 280px 390px;
+            margin:  -0px -1900px;
+            position: absolute;
+            font-size: 190px;
+            color: rgb(255, 0, 0);
+            background-color: rgb(4, 15, 34);
+            border: 50px solid black;
+        }
+        #btn:hover {
+            transform: translateY(-6px);
+            transition:transform 250ms cubic-bezier(.3, .7, .4, 1.5);
+            filter: brightness(200%);
+            color: rgb(253, 53, 4);
+            border: 50px solid rgb(0, 0, 0);
+
+        }
+    </style>
+
+    <script>
+        
+        let moveUp = false;
+        let moveDown = false;
+        let moveRight = false;
+        let moveLeft = false;
+        let kameShot = false;
+        let kameShot2 = false;
+        let moveUp2 = false;
+        let moveDown2 = false;
+        let moveRight2 = false;
+        let moveLeft2 = false;
+        let moveUp3 = false;
+        let moveDown3 = false;
+        let moveLeft3 = false;
+        let moveRight3 =false;
+        let flyGoku = false;
+        let flyGohan = false;
+        var aura = false;
+
+
+        let btn;
+        let newBtn;
+        let secondButton;
+
+        let cellLife = 10000;
+        let killCell = false;
+
+        let gokuLife = 20;
+        let killGoku = false;
+
+        let gohanLife = 20;
+        let killGohan = false;
+
+        let desk;
+        let ctx;
+        
+        let kameRight = [];
+        let kameLeft = [];
+        let kameGohanLeft = [];
+        let kameGohanRight = [];
+        let cellAttackR = [];
+        let cellAttackDiaUpR = [];
+        let cellAttackDiaUpL = [];
+        let cellAttackL = [];
+        let startAura = [];
+
+        let rndShot = Math.floor(Math.random()*5);
+
+        document.onkeydown = function(moveKey) {
+            if (moveKey.keyCode == 38){
+                moveUp = true;
+            }
+            if (moveKey.keyCode == 40){
+                moveDown = true;
+            }
+            if (moveKey.keyCode == 37){
+                moveLeft = true;
+            }
+            if (moveKey.keyCode == 65){
+                moveLeft3 = true;
+            }
+            if (moveKey.keyCode == 39){
+                moveRight = true;
+            }
+            if (moveKey.keyCode == 68){
+                moveRight3 = true;
+            }
+            if (moveKey.keyCode == 87){
+                moveUp3 = true;
+            }
+            if (moveKey.keyCode == 83){
+                moveDown3 = true;
+            }
+            if (moveKey.keyCode == 32){
+                kameShot = true;
+            }
+            if (moveKey.keyCode == 104){
+                moveUp2 = true;
+            }
+            if (moveKey.keyCode == 98){
+                moveDown2 = true;
+            }
+            if (moveKey.keyCode == 102){
+                moveRight2 = true;
+            }
+            if (moveKey.keyCode == 100){
+                moveLeft2 = true;
+            }
+            if (moveKey.keyCode == 96){
+                kameShot2 = true;
+            }
+            if (moveKey.keyCode == 17){
+                flyGoku = true;
+            }
+            if (moveKey.keyCode == 13){
+                flyGohan = true;
+            }
+            
+        }
+        
+        document.onkeyup = function(moveKey) {
+            if (moveKey.keyCode == 38){
+                moveUp = false;
+            }
+            if (moveKey.keyCode == 40){
+                moveDown = false;
+            }
+            if (moveKey.keyCode == 37){
+                moveLeft = false;
+            }
+            if (moveKey.keyCode == 65){
+                moveLeft3 = false;
+            }
+            if (moveKey.keyCode == 39){
+                moveRight = false;
+            }
+            if (moveKey.keyCode == 68){
+                moveRight3 = false;
+            }
+            if (moveKey.keyCode == 87){
+                moveUp3 = false;
+            }
+            if (moveKey.keyCode == 83){
+                moveDown3 = false;
+            }
+            if (moveKey.keyCode == 32){
+                kameShot = false;
+            }
+            if (moveKey.keyCode == 104){
+                moveUp2 = false;
+            }
+            if (moveKey.keyCode == 98){
+                moveDown2 = false;
+            }
+            if (moveKey.keyCode == 102){
+                moveRight2 = false;
+            }
+            if (moveKey.keyCode == 100){
+                moveLeft2 = false;
+            }
+            if (moveKey.keyCode == 96){
+                kameShot2 = false;
+            }
+            if (moveKey.keyCode == 17){
+                flyGoku = false;
+            }
+            if (moveKey.keyCode == 13){
+                flyGohan = false;
+            }
+        }
+
+        let backgroundImage = {
+            x: 0,
+            y: 0,
+            width: 1900,
+            heigth: 860,
+            src: 'img/Dragonball.jpg',
+            img: new Image()
+        }
+
+        let goku = {
+            x: 200,
+            y: 610,
+            width: 120,
+            heigth: 200,
+            src: 'img/goku-f.png',
+            img: new Image()
+        }
+        
+        let cell = {
+            x: 800,
+            y: 350,
+            width: 500,
+            heigth: 620,
+            src: 'img/cell-f.png',
+            img: new Image()
+        }
+
+        let gohan = {
+            x: 1400,
+            y: 670,
+            width: 120,
+            heigth: 160,
+            src: 'img/gohan-f.png',
+            img: new Image()
+        }
+
+        let kamehamehaGohanL = {
+                x: gohan.x -145,
+                y: gohan.y,
+                width: 220,
+                heigth: 200,
+                src: 'img/kamehamehaGohanL.png',
+                img: new Image()
+            }
+
+        function finish() {
+            if (killCell) {
+                let newScreen = document.getElementById("screen");
+                let end = false;
+                setTimeout(function(){
+                    desk.remove();
+                    newScreen.style.border = "inset 50px rgb(65, 60, 58)";
+                    newScreen.style.left = "750px";
+                    newScreen.style.top = "250px";
+                    newScreen.style.fontSize = "50px";
+                    newScreen.innerHTML = "Glückwunsch!<br>Du hast gewonnen!<br><br><br>[F5] Neues Spiel";
+                },2000);
+            }
+
+            if (killGohan || killGoku) {
+                let newScreen = document.getElementById("screen");
+                let end = false;
+                setTimeout(function(){
+                    desk.remove();
+                    newScreen.style.border = "inset 50px rgb(65, 60, 58)";
+                    newScreen.style.left = "750px";
+                    newScreen.style.top = "250px";
+                    newScreen.style.fontSize = "50px";
+                    newScreen.style.color = "red";
+                    newScreen.innerHTML = "Schade...!<br>Du hast verloren!<br><br><br>[F5] Neues Spiel";
+                },2000);
+            }
+        }
+
+        function startGame(){
+            //replaceButton();
+            appendBtn();
+            delButton();
+        }
+
+        function delButton() {
+            newBtn.addEventListener('click', function(){
+                newBtn.parentNode.removeChild(newBtn);
+                secondButton.parentNode.removeChild(secondButton);
+                start2vs1();
+            });
+            secondButton.addEventListener("click", function(){
+                //secondButton.parentNode.removeChild(secondButton);
+                actionBar();
+                newBtn.parentNode.removeChild(newBtn);
+                start1vs1();
+
+            });
+        }
+
+        function appendBtn(){
+            replaceButton();
+            secondButton = document.createElement("button");
+            let buttenName2 = document.createTextNode("1vs1");
+            secondButton.appendChild(buttenName2);
+            secondButton.setAttribute("id", "secondButton");
+            secondButton.style.padding = "337px 335px";
+            secondButton.style.position = "absolute";
+            secondButton.style.left = "920px";
+            secondButton.style.top = "50px";
+            secondButton.style.fontSize = "100px";
+            secondButton.style.fontFamily = "arial black";
+            secondButton.style.background = "rgb(231, 153, 7)";
+            secondButton.style.color = "green";
+            secondButton.onmouseover = function() {
+                secondButton.style.background = "green";
+                secondButton.style.color = "rgb(231, 153, 7)";
+                secondButton.style.padding = "345px 340px";
+                secondButton.style.left = "915px";
+                secondButton.style.top = "45px";
+            }
+            secondButton.onmouseleave = function() {
+                secondButton.style.background = "rgb(231, 153, 7)";
+                secondButton.style.color = "green";
+                secondButton.style.padding = "337px 335px";
+                secondButton.style.left = "920px";
+                secondButton.style.top = "50px";
+            }
+
+            newBtn.parentNode.appendChild(secondButton);
+        }
+
+        function replaceButton() {
+            btn = document.getElementById("btn");
+            //btn.parentNode.removeChild(btn);
+            newBtn = document.createElement("button");
+            let buttonName = document.createTextNode("2v1");
+            newBtn.appendChild(buttonName);
+            newBtn.setAttribute('id', 'newBtn');
+            //newBtn.style.margin = "-150px -190px";
+            newBtn.style.padding = "338px 335px"
+            newBtn.style.left = "50px";
+            newBtn.style.top = "50px";
+            newBtn.style.background = "red";
+            newBtn.style.position = "absolute";
+            newBtn.style.fontSize = "100px";
+            newBtn.style.fontFamily = "arial black";
+            newBtn.style.color = "darkgreen";
+            btn.parentNode.replaceChild(newBtn, btn);
+            newBtn.onmouseover = function() {
+                newBtn.style.background = "darkgreen";
+                newBtn.style.color = "red";
+                newBtn.style.padding = "345px 340px";
+                newBtn.style.left = "45px";
+                newBtn.style.top = "45px";
+            }
+            newBtn.onmouseleave = function() {
+                newBtn.style.background = "red";
+                newBtn.style.color = "darkgreen";
+                newBtn.style.padding = "338px 335px";
+                newBtn.style.left = "50px";
+                newBtn.style.top = "50px";
+            }
+            
+        }
+
+        actionBar =()=>{
+            actionBarAura();
+            actionBarStartAura();
+            actionBarKamehameha();
+        }
+
+        function actionBarKamehameha() {
+            btnAction1.onmousedown = function() {
+                kameShot = true;
+            }
+            btnAction1.onmouseup = function() {
+                kameShot = false;
+            }
+        }
+
+        function actionBarStartAura() {
+            btnAction2.onmousedown = function() {
+                aura = true;
+            }   
+            btnAction2.onmouseup =function() {
+                aura = false;
+            }
+        }
+
+        function actionBarKame(){
+            let btnAction1 = document.createElement("button");
+            let btnActionDescription = document.createTextNode("Kamehameha");
+            btnAction1.appendChild(btnActionDescription);
+            btnAction1.setAttribute("id", "btnAction1");
+            btnAction1.style.padding = "10px 15px";
+            btnAction1.style.position = "absolute";
+            btnAction1.style.left = "220px";
+            btnAction1.style.top = "872px";
+            btnAction1.style.fontSize = "15px";
+            btnAction1.style.fontFamily = "arial black";
+            btnAction1.style.background = "darkgrey";
+            btnAction1.style.color = "darklila";
+            btnAction1.style.border = "inset grey 3px";
+            secondButton.parentNode.replaceChild(btnAction1, secondButton);
+            btnAction1.onmouseover = function(){
+                btnAction1.style.background = "#848389";
+                btnAction1.style.fontSize = "15px";
+            }
+            btnAction1.onmouseleave = function() {
+                btnAction1.style.background = "darkgrey";
+                btnAction1.style.fontSize = "13px";
+            }
+            btnAction1.onmouseup = function() {
+                btnAction1.style.background = "darkgrey";
+                btnAction1.style.fontSize = "15px";
+            }
+            btnAction1.onmousedown = function(){
+                btnAction1.style.background = "#848389";
+                btnAction1.style.fontSize = "13px";
+            }
+        }
+
+        function actionBarAura(){
+            actionBarKame();
+            let btnAction2 = document.createElement("button");
+            let btnActionDescription2 = document.createTextNode("Aura");
+            btnAction2.appendChild(btnActionDescription2);
+            btnAction2.setAttribute("id", "btnAction2");
+            btnAction2.style.padding = "10px 15px";
+            btnAction2.style.position = "absolute";
+            btnAction2.style.left = "420px";
+            btnAction2.style.top = "872px";
+            btnAction2.style.fontSize = "13px";
+            btnAction2.style.fontFamily = "arial black";
+            btnAction2.style.background = "darkgrey";
+            btnAction2.style.color = "darklila";
+            btnAction2.style.border = "inset grey 3px";
+            btnAction1.parentNode.appendChild(btnAction2);
+            btnAction2.onmouseover = function(){
+                btnAction2.style.background = "#848389";
+                btnAction2.style.fontSize = "15px";
+            }
+            btnAction2.onmouseleave = function() {
+                btnAction2.style.background = "darkgrey";
+                btnAction2.style.fontSize = "13px";
+            }
+            btnAction2.onmouseup = function() {
+                btnAction2.style.background = "darkgrey";
+                btnAction2.style.fontSize = "15px";
+            }
+            btnAction2.onmousedown = function(){
+                btnAction2.style.background = "#848389";
+                btnAction2.style.fontSize = "13px";
+            }
+
+        }
+        
+        function start2vs1() {
+            desk = document.getElementById("desk");
+            ctx = desk.getContext("2d");
+            intervalSetting();
+            loadImg();
+            draw2vs1();
+        }
+
+        function start1vs1(){
+
+            desk = document.getElementById('desk');
+            ctx = desk.getContext('2d');
+            intervalSetting();
+            loadImg();
+            draw1vs1();
+        }
+
+        function intervalSetting() {
+            setInterval(updateKey, 1000/25);
+            setInterval(renderAura, 1000/10);
+            setInterval(gokuKameRight, 500);
+            setInterval(gokuKameLeft, 500);
+            setInterval(gohanKameLeft, 1000/10);
+            setInterval(gohanKameRight, 1000/10);
+            setInterval(cellShotsRight, 5000/5);
+            setInterval(cellShotsLeft, 6000/5);
+            setInterval(cellShotsDiaUpRight, 4000/5);
+            setInterval(cellShotsDiaUpLeft, 4000/5);
+            setInterval(checkKollCellAttackGokuDiaUpR, 1000/10);
+            setInterval(checkKollCellAttackGokuDiaUpL, 1000/10);
+            setInterval(checkKollisionCellAttackGohanR, 1000/10);
+            setInterval(checkKollisionCellAttackGohanL, 1000/10);
+            setInterval(checkKollisionCellAttackGokuR, 1000/10);
+            setInterval(checkKollisionCellAttackGokuL, 1000/10);
+            setInterval(checkKollisionGokuKameR, 1000/10);
+            setInterval(checkKollisionGokuKameL, 1000/10);
+            setInterval(checkKollisionGohanKameL, 1000/10);
+            setInterval(checkKollisionGohanKameR, 1000/10);
+            //setInterval(cellMove, 1000/25);
+            setInterval(checkKill, 1000/25);
+            setInterval(finish, 1000/25);
+            //setInterval(deskMove, 5000/5);
+        }
+
+
+        function cellShotsDiaUpRight() {
+            if (killCell){
+                rndShot = false;
+            }
+            if (rndShot) {
+                let cellShotDiaUpRight = {
+                    x: cell.x + 60,
+                    y: cell.y + 175,
+                    width: 400,
+                    heigth: 200,
+                    src: 'img/cell-shotDR.png',
+                    img: new Image()
+                };
+                cellShotDiaUpRight.img.src = cellShotDiaUpRight.src;
+                cellAttackDiaUpR.push(cellShotDiaUpRight);
+            }
+        }
+
+        function checkKollCellAttackGokuDiaUpR() {
+            cellAttackDiaUpR.forEach(function(cellShotDiaUpRight){
+                if (goku.x  -125 + goku.width > cellShotDiaUpRight.x &&
+                    goku.y  - 110 + goku.heigth > cellShotDiaUpRight.y &&
+                    goku.x  - 200 < cellShotDiaUpRight.x &&
+                    goku.y  + 100< cellShotDiaUpRight.y + cellShotDiaUpRight.heigth){
+                        cellShotDiaUpRight.img.src = 'img/boom.webp';
+                        setTimeout(()=> {
+                            cellAttackDiaUpR = cellAttackDiaUpR.filter(u => u != cellShotDiaUpRight);
+                        }, 100);
+                        if (gokuLife > 0){
+                            gokuLife --;
+                            if (gokuLife == 0){
+                                killGoku = true;
+                            }
+                        }
+                    }
+            });
+        }
+
+        function cellShotsDiaUpLeft() {
+            if (killCell){
+                rndShot = false;
+            }
+            if (rndShot) {
+                let cellShotDiaUpLeft = {
+                    x: cell.x,
+                    y: cell.y + 160,
+                    width: 400,
+                    heigth: 200,
+                    src: 'img/cell-shotDL.png',
+                    img: new Image()
+                };
+                cellShotDiaUpLeft.img.src = cellShotDiaUpLeft.src;
+                cellAttackDiaUpL.push(cellShotDiaUpLeft);
+            }
+        }
+
+        function checkKollCellAttackGokuDiaUpL() {
+            cellAttackDiaUpL.forEach(function(cellShotDiaUpLeft){
+                if (goku.x  - 150 + goku.width > cellShotDiaUpLeft.x &&
+                    goku.y  - 110 + goku.heigth > cellShotDiaUpLeft.y &&
+                    goku.x  - 200 < cellShotDiaUpLeft.x &&
+                    goku.y  + 100< cellShotDiaUpLeft.y + cellShotDiaUpLeft.heigth){
+                        cellShotDiaUpLeft.img.src = 'img/boom.webp';
+                        setTimeout(()=> {
+                            cellAttackDiaUpL = cellAttackDiaUpL.filter(u => u != cellShotDiaUpLeft);
+                        }, 100);
+                        if (gokuLife > 0){
+                            gokuLife --;
+                            if (gokuLife == 0){
+                                killGoku = true;
+                            }
+                        }
+                    }
+            });
+        }
+
+        function checkKollisionCellAttackGohanR() {
+            cellAttackR.forEach(function(cellShotRight){
+                if (gohan.x  + gohan.width > cellShotRight.x &&
+                    gohan.y  - 110 + gohan.heigth > cellShotRight.y &&
+                    gohan.x  - 200 < cellShotRight.x &&
+                    gohan.y  + 100< cellShotRight.y + cellShotRight.heigth){
+                        cellShotRight.img.src = 'img/boom.webp';
+                        setTimeout(()=> {
+                            cellAttackR = cellAttackR.filter(u => u != cellShotRight);
+                        }, 100);
+                        if (gohanLife > 0){
+                            gohanLife --;
+                            if (gohanLife == 0){
+                                killGohan = true;
+                            }
+                        }
+                    }
+            });
+        }
+
+        function cellShotsRight() {
+            if (killCell){
+                rndShot = false;
+            }
+            if (rndShot) {
+                let cellShotRight = {
+                    x: cell.x + 60,
+                    y: cell.y + 175,
+                    width: 400,
+                    heigth: 200,
+                    src: 'img/cell-shot.png',
+                    img: new Image()
+                };
+                cellShotRight.img.src = cellShotRight.src;
+                cellAttackR.push(cellShotRight);
+            }
+        }
+
+        function checkKollisionCellAttackGokuR() {
+            cellAttackR.forEach(function(cellShotRight){
+                if (goku.x  + goku.width > cellShotRight.x &&
+                    goku.y  - 110 + goku.heigth > cellShotRight.y &&
+                    goku.x  - 200 < cellShotRight.x &&
+                    goku.y  + 100< cellShotRight.y + cellShotRight.heigth){
+                        cellShotRight.img.src = 'img/boom.webp';
+                        setTimeout(()=> {
+                            cellAttackR = cellAttackR.filter(u => u != cellShotRight);
+                        }, 100);
+                        if (gokuLife > 0){
+                            gokuLife --;
+                            if (gokuLife == 0){
+                                killGoku = true;
+                            }
+                        }
+                    }
+            });
+        }
+
+        function cellShotsLeft() {
+            if (killCell){
+                rndShot = false;
+            }
+            if (rndShot) {
+                let cellShotLeft = {
+                    x: cell.x,
+                    y: cell.y + 175,
+                    width: 400,
+                    heigth: 200,
+                    src: 'img/cell-shotL.png',
+                    img: new Image()
+                };
+                cellShotLeft.img.src = cellShotLeft.src;
+                cellAttackL.push(cellShotLeft);
+            }
+        }
+
+        function checkKollisionCellAttackGohanL(){
+            cellAttackL.forEach(function(cellShotLeft){
+                if (gohan.x - 150 + gohan.width > cellShotLeft.x &&
+                    gohan.y - 110 + gohan.heigth > cellShotLeft.y &&
+                    gohan.x - 200 < cellShotLeft.x &&
+                    gohan.y + 100< cellShotLeft.y + cellShotLeft.heigth) {
+                        cellShotLeft.img.src = 'img/boom.webp';
+                        setTimeout(() => {
+                            cellAttackL = cellAttackL.filter(u => u != cellShotLeft);
+                        }, 100);
+                        if (gohanLife > 0){
+                            gohanLife --;
+                            if (gohanLife == 0){
+                                killGohan = true;
+                            }
+                        }
+                    }
+            });
+        }
+
+        function checkKollisionCellAttackGokuL(){
+            cellAttackL.forEach(function(cellShotLeft){
+                if (goku.x - 150 + goku.width > cellShotLeft.x &&
+                    goku.y - 110 + goku.heigth > cellShotLeft.y &&
+                    goku.x - 200 < cellShotLeft.x &&
+                    goku.y + 100< cellShotLeft.y + cellShotLeft.heigth) {
+                        cellShotLeft.img.src = 'img/boom.webp';
+                        setTimeout(() => {
+                            cellAttackL = cellAttackL.filter(u => u != cellShotLeft);
+                        }, 100);
+                        if (gokuLife > 0){
+                            gokuLife --;
+                            if (gokuLife == 0){
+                                killGoku = true;
+                            }
+                        }
+                    }
+            });
+        }
+
+        function renderAura() {
+            if (aura){
+                let startRenderAura = {
+                    width: 320,
+                    heigth: 520,
+                    src: 'img/yellowAura.png',
+                    img: new Image()
+                };
+                startRenderAura.img.src = startRenderAura.src;
+                startAura.push(startRenderAura); 
+                startAura.forEach(function (startRenderAura){
+                    setInterval(function(){
+                        startAura.shift(startRenderAura);  
+                    }, 10000); 
+                });                        
+           }
+        }
+
+
+        function gokuKameLeft() {
+            if (kameShot && goku.x -100 > cell.x) {
+                let kamehamehaLeft = {
+                    x: goku.x -145,
+                    y: goku.y,
+                    width: 220,
+                    heigth: 200,
+                    src: 'img/kamehameha2.png',                  
+                    img: new Image()
+                };
+                kamehamehaLeft.img.src = kamehamehaLeft.src;
+                kameLeft.push(kamehamehaLeft);
+            }
+        }
+
+        function checkKollisionGokuKameL() {
+            kameLeft.forEach(function(kamehamehaLeft){
+                if (cell.x - 300 + cell.width > kamehamehaLeft.x &&
+                    cell.y - 200 + cell.heigth > kamehamehaLeft.y &&
+                    cell.x + 30 < kamehamehaLeft.x &&
+                    cell.y + 310 < kamehamehaLeft.y + kamehamehaLeft.heigth) {
+                        kamehamehaLeft.img.src = 'img/boom.webp';
+                        setTimeout(()=> {
+                            kameLeft = kameLeft.filter(u => u != kamehamehaLeft);
+                        }, 100);
+                        if (cellLife > 0){
+                            if (cellLife > 500){
+                                cellLife = cellLife - 500;
+                            }
+                            if (cellLife <= 500){
+                                cellLife --;
+                            }
+                            if (cellLife == 0){
+                                killCell = true;
+                            }
+                        }
+                }
+            });
+        }
+
+        function gokuKameRight() {
+            if (kameShot && goku.x -130 < cell.x) {
+                let kamehamehaRight = {
+                    x: goku.x + 25,
+                    y: goku.y,
+                    width: 220,
+                    heigth: 200,
+                    src: 'img/kamehameha.png',
+                    img: new Image()
+                };
+                kamehamehaRight.img.src = kamehamehaRight.src;
+                kameRight.push(kamehamehaRight);
+            }
+        }
+
+        function checkKollisionGokuKameR() {
+            kameRight.forEach(function(kamehamehaRight){
+                if (cell.x - 300 + cell.width > kamehamehaRight.x &&
+                    cell.y - 200 + cell.heigth > kamehamehaRight.y &&
+                    cell.x + 30 < kamehamehaRight.x &&
+                    cell.y + 310 < kamehamehaRight.y + kamehamehaRight.heigth) {
+                        kamehamehaRight.img.src = 'img/boom.webp';
+                        setTimeout(()=> {
+                            kameRight = kameRight.filter(u => u != kamehamehaRight);
+                        }, 100);
+                        if (cellLife > 0){
+                            if (cellLife > 500){
+                                cellLife = cellLife - 500;
+                            }
+                            if (cellLife <= 500){
+                                cellLife --;
+                            }
+                            if (cellLife == 0){
+                                killCell = true;
+                            }
+                        }
+                }
+            });
+        }
+
+        function checkKollisionGohanKameL() {
+            kameGohanLeft.forEach(function(kamehamehaGohanL){
+                if (cell.x - 200 + cell.width > kamehamehaGohanL.x &&
+                    cell.y - 200 + cell.heigth > kamehamehaGohanL.y &&
+                    cell.x - 200 < kamehamehaGohanL.x &&
+                    cell.y + 310 < kamehamehaGohanL.y + kamehamehaGohanL.heigth) {
+                        kamehamehaGohanL.img.src = 'img/boom.webp';
+                        setTimeout(()=>{
+                            kameGohanLeft = kameGohanLeft.filter(u => u != kamehamehaGohanL);
+                        }, 100);
+                        if (cellLife > 0){
+                            cellLife --;
+                            if (cellLife == 0){
+                                killCell = true;
+                            }
+                        }
+                }
+            });
+        }
+
+        function gohanKameLeft() {
+            if (kameShot2 && gohan.x > cell.x){
+               let kamehamehaGohanL = {
+                   x: gohan.x -145,
+                   y: gohan.y,
+                   width: 180,
+                   heigth:160,
+                   src: 'img/kamehameha2.png',
+                   img: new Image()
+               }
+               kamehamehaGohanL.img.src = kamehamehaGohanL.src;
+               kameGohanLeft.push(kamehamehaGohanL);
+            }
+        }
+
+        function checkKollisionGohanKameR() {
+            kameGohanRight.forEach(function(kamehamehaGohanR){
+                if (cell.x - 300 + cell.width > kamehamehaGohanR.x &&
+                    cell.y - 200 + cell.heigth > kamehamehaGohanR.y &&
+                    cell.x + 30 < kamehamehaGohanR.x &&
+                    cell.y + 310 < kamehamehaGohanR.y + kamehamehaGohanR.heigth) {
+                        kamehamehaGohanR.img.src = 'img/boom.webp';
+                        setTimeout(()=>{
+                            kameGohanRight = kameGohanRight.filter(u => u != kamehamehaGohanR);
+                        }, 100);
+                        if (cellLife > 0){
+                            cellLife --;
+                            if (cellLife == 0){
+                                killCell = true;
+                            }
+                        }
+                }
+            });
+        }
+
+        function gohanKameRight() {
+            if (kameShot2 && gohan.x -150 < cell.x){
+               let kamehamehaGohanR = {
+                   x: gohan.x + 45,
+                   y: gohan.y,
+                   width: 180,
+                   heigth:160,
+                   src: 'img/kamehameha.png',
+                   img: new Image()
+               }
+               kamehamehaGohanR.img.src = kamehamehaGohanR.src;
+               kameGohanRight.push(kamehamehaGohanR);
+            }
+        }
+
+        function healthBarCell() {
+            ctx.fillStyle = "red";
+            ctx.fillRect(400, 400, 500, 400);
+        }
+
+        function jumpGoku(){
+            if (flyGoku) {
+                if (goku.y >= 450){
+                    goku.y -= 25;
+                } 
+            }    
+            else{
+                if (goku.y <= 590){
+                    goku.y += 25;
+                }
+            }
+        }
+
+        function jumpGohan(){
+            if (flyGohan) {
+                if (gohan.y >= 450){
+                    gohan.y -= 25;
+                } 
+            }    
+            else{
+                if (gohan.y <= 660){
+                    gohan.y += 25;
+                }
+            }
+        }
+
+        function gokuFight() {
+            setInterval(function() {
+                if (cell.x - 200  + cell.width > goku.x &&
+                    cell.y - 125 + cell.heigth > goku.y &&
+                    cell.x + 30 < goku.x &&
+                    cell.y + 310 < goku.y + goku.heigth){
+                    goku.img.src = 'img/goku-kickL.png';
+                    cellLife --;
+                    if (cellLife == 0){
+                        killCell = true; 
+                    }
+                }
+            }, 1000);
+            
+            setInterval(function(){
+                if (cell.x - 300 + cell.width > goku.x &&
+                    cell.y - 200 + cell.heigth > goku.y &&
+                    cell.x + 30 < goku.x &&
+                    cell.y + 310 < goku.y + goku.heigth) {
+                    goku.img.src = 'img/goku-kickR.png';
+                    cellLife --;
+                    if (cellLife == 0){
+                    killCell = true;
+                    }
+                }
+            }, 1000);
+        }
+
+        function gokuBody(){
+            if (flyGoku && moveLeft){
+                goku.img.src = 'img/goku-bL.png';
+            }
+            if (flyGoku && moveRight){
+                goku.img.src = 'img/goku-bR.png';
+            }
+            if (flyGoku && moveUp){
+                goku.img.src = 'img/goku-b.png';
+            }
+            if (!flyGoku && cell.x +150 > goku.x){
+                goku.img.src = 'img/goku-f.png';
+            }
+            if (!flyGoku && cell.x +150 < goku.x){
+                goku.img.src = 'img/goku-fL.png';
+            }
+            if (!flyGoku && moveRight){
+                goku.img.src = 'img/goku-mR.png';
+            }
+            if (!flyGoku && moveLeft){
+                goku.img.src = 'img/goku-mL.png';
+            }
+            if (!flyGoku && moveDown){
+                goku.img.src = 'img/goku-b.png';
+            }
+        }
+
+        function gohanBody() {
+            if (!flyGohan && cell.x +150 > gohan.x){
+                gohan.img.src = 'img/gohan-f.png';
+            }
+            if (!flyGohan && cell.x +150 < gohan.x){
+                gohan.img.src = 'img/gohan-fL.png';
+            }
+        }
+
+        function charBody(){
+            gokuBody();
+            gohanBody();
+            gokuFight();
+        }
+
+        function updateKey() {
+            charBody();
+            jumpGoku();
+            jumpGohan();            
+            if (flyGoku && moveUp && goku.y >= 10){
+                goku.y -= 25;
+            }
+            if (moveDown && goku.y <= 590){
+                goku.y += 25;
+            }
+            if (moveLeft && goku.x >= 10){
+                goku.x -= 25;
+            }
+            if (moveRight && goku.x <= 1660){
+                goku.x += 25;
+            }
+            if (moveUp2 && gohan.y >= 10){
+                gohan.y -= 25;
+            }
+            if (moveDown2 && gohan.y <= 660){
+                gohan.y += 25;
+            }
+            if (moveRight2 && gohan.x <= 1695){
+                gohan.x += 25;
+            }
+            if (moveLeft2 && gohan.x >= 0){
+                gohan.x -= 25;
+            }
+            /*if (moveUp3) {
+                cell.y -= 50;
+            }
+            if (moveDown3) {
+                cell.y += 50;
+            }
+            if (moveLeft3) {
+                cell.x -= 50;
+            }
+            if (moveRight3){
+                cell.x += 50;
+            }*/
+            cellAttackL.forEach(function(cellShotLeft){
+                cellShotLeft.x -= 65;
+
+            });
+            cellAttackR.forEach(function(cellShotRight){
+                cellShotRight.x += 65;
+            });
+            cellAttackDiaUpR.forEach(function(cellShotDiaUpRight){
+                cellShotDiaUpRight.x += 65;
+                cellShotDiaUpRight.y -= 65;
+            });
+            cellAttackDiaUpL.forEach(function(cellShotDiaUpLeft){
+                cellShotDiaUpLeft.x -= 65;
+                cellShotDiaUpLeft.y -= 65;
+            });
+            kameRight.forEach(function (kamehamehaRight){
+                kamehamehaRight.x += 45;
+            });
+            kameLeft.forEach(function (kamehamehaLeft){
+                kamehamehaLeft.x -= 45;
+            });
+            kameGohanLeft.forEach(function (kamehamehaGohanL){
+                kamehamehaGohanL.x -= 35;
+            });
+            kameGohanRight.forEach(function (kamehamehaGohanR){
+                kamehamehaGohanR.x += 35;
+            });
+            startAura.forEach(function (startRenderAura){
+                startRenderAura.x = goku.x - 70;
+                startRenderAura.y = goku.y - 310;
+            });
+        }
+
+        /*function checkDraw() {
+            newBtn.addEventListener("click", function(){
+                draw2vs1();
+            });
+            secondButton.addEventListener("click", function(){
+                draw1vs1();
+            });
+        }*/
+
+        function fillCircle(x, y, r, color) {
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(x, y, r, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+
+        function cellLifeBar1vs1(){
+            fillCircle(1480, 30, 30, 'black');
+            ctx.fillStyle = "black";
+            ctx.fillRect(1500, 8, 222, 40);
+            ctx.drawImage(cell.img, 1435, -30, 100, 100);
+            ctx.fillStyle = "red";
+            ctx.fillRect(1505, 17, 200, 20);
+            ctx.fillStyle = "green";
+            if (cellLife >= 0){
+                ctx.fillRect(1505, 17, cellLife*2/100, 20);
+            }
+            else{
+            ctx.fillRect(1505, 17, 0, 20);
+            }
+        }
+
+        function cellLifeBar2vs1(){
+            fillCircle(780, 30, 30, 'black');
+            ctx.fillStyle = "black";
+            ctx.fillRect(800, 8, 222, 40);
+            ctx.drawImage(cell.img, 735, -30, 100, 100);
+            ctx.fillStyle = "red";
+            ctx.fillRect(800, 17, 200, 20);
+            ctx.fillStyle = "green";
+            if (cellLife >= 0){
+                ctx.fillRect(800, 17, cellLife*2/100, 20);
+            }
+            else {
+                ctx.fillRect(800, 17, 0, 20);
+            }
+        }
+
+        function gokuLifeBar(){
+            ctx.fillStyle = "black";
+            ctx.beginPath();
+            ctx.arc(80, 30, 30, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.fillStyle = "black";
+            ctx.fillRect(100, 8, 222, 40);
+            ctx.drawImage(goku.img, 60, 10, 35, 35);
+            ctx.fillStyle = "red";
+            ctx.fillRect(100, 17, 200, 20);
+            ctx.fillStyle = "green";
+            ctx.fillRect(100, 17, gokuLife*10, 20);
+        }
+
+        function gohanLifeBar(){
+            ctx.fillStyle = "black";
+            ctx.beginPath();
+            ctx.arc(1480, 30, 30, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.fillStyle = "black";
+            ctx.fillRect(1500, 8, 222, 40);
+            ctx.drawImage(gohan.img, 1460, 5, 50, 50);
+            ctx.fillStyle = "red";
+            ctx.fillRect(1500, 17, 200, 20);
+            ctx.fillStyle = "green";
+            ctx.fillRect(1500, 17, gohanLife*10, 20);
+        }
+
+        function draw1vs1(){
+            ctx.drawImage(backgroundImage.img, backgroundImage.x, backgroundImage.y, backgroundImage.width, backgroundImage.heigth);
+            cellLifeBar1vs1();
+            gokuLifeBar();
+            ctx.drawImage(cell.img, cell.x, cell.y, cell.width, cell.heigth);
+            startAura.forEach(function(startRenderAura){
+                ctx.drawImage(startRenderAura.img, startRenderAura.x, startRenderAura.y, startRenderAura.width, startRenderAura.heigth);
+            });
+            ctx.drawImage(goku.img, goku.x, goku.y, goku.width, goku.heigth);
+
+            if (goku.x < cell.x){
+                cellAttackL.forEach(function(cellShotLeft){
+                    ctx.drawImage(cellShotLeft.img, cellShotLeft.x, cellShotLeft.y, cellShotLeft.width, cellShotLeft.heigth);
+                });
+            }
+            if (goku.x > cell.x){
+                cellAttackR.forEach(function(cellShotRight){
+                    ctx.drawImage(cellShotRight.img, cellShotRight.x, cellShotRight.y, cellShotRight.width, cellShotRight.heigth);
+                });
+            }
+            if (goku.y < cell.y && goku.x > cell.x){
+                cellAttackDiaUpR.forEach(function(cellShotDiaUpRight){
+                    ctx.drawImage(cellShotDiaUpRight.img, cellShotDiaUpRight.x, cellShotDiaUpRight.y, cellShotDiaUpRight.width, cellShotDiaUpRight.heigth);
+                });
+            }
+            if (goku.y < cell.y && goku.x < cell.x){
+                cellAttackDiaUpL.forEach(function(cellShotDiaUpLeft){
+                    ctx.drawImage(cellShotDiaUpLeft.img, cellShotDiaUpLeft.x, cellShotDiaUpLeft.y, cellShotDiaUpLeft.width, cellShotDiaUpLeft.heigth);
+                });
+            }
+            kameLeft.forEach(function(kamehamehaLeft){
+                ctx.drawImage(kamehamehaLeft.img, kamehamehaLeft.x, kamehamehaLeft.y, kamehamehaLeft.width, kamehamehaLeft.heigth);
+            });
+            kameRight.forEach(function(kamehamehaRight){
+                ctx.drawImage(kamehamehaRight.img, kamehamehaRight.x, kamehamehaRight.y, kamehamehaRight.width, kamehamehaRight.heigth);
+            });
+
+            requestAnimationFrame(draw1vs1);
+        }
+
+        function draw2vs1() {
+            ctx.drawImage(backgroundImage.img, backgroundImage.x, backgroundImage.y, backgroundImage.width, backgroundImage.heigth);
+            cellLifeBar2vs1();
+            gokuLifeBar();
+            gohanLifeBar();
+            ctx.drawImage(cell.img, cell.x, cell.y, cell.width, cell.heigth);
+            ctx.drawImage(gohan.img, gohan.x, gohan.y, gohan.width, gohan.heigth);
+            ctx.drawImage(goku.img, goku.x, goku.y, goku.width, goku.heigth);
+
+            cellAttackR.forEach(function(cellShotRight){
+                ctx.drawImage(cellShotRight.img, cellShotRight.x, cellShotRight.y, cellShotRight.width, cellShotRight.heigth);
+            });
+            cellAttackL.forEach(function(cellShotLeft){
+                ctx.drawImage(cellShotLeft.img, cellShotLeft.x, cellShotLeft.y, cellShotLeft.width, cellShotLeft.heigth);
+            });
+            if (goku.y < cell.y && goku.x > cell.x){
+                cellAttackDiaUpR.forEach(function(cellShotDiaUpRight){
+                    ctx.drawImage(cellShotDiaUpRight.img, cellShotDiaUpRight.x, cellShotDiaUpRight.y, cellShotDiaUpRight.width, cellShotDiaUpRight.heigth);
+                });
+            }
+            if (goku.y < cell.y && goku.x < cell.x){
+                cellAttackDiaUpL.forEach(function(cellShotDiaUpLeft){
+                    ctx.drawImage(cellShotDiaUpLeft.img, cellShotDiaUpLeft.x, cellShotDiaUpLeft.y, cellShotDiaUpLeft.width, cellShotDiaUpLeft.heigth);
+                });
+            }
+            if (gohan.y < cell.y && gohan.x > cell.x){
+                cellAttackDiaUpR.forEach(function(cellShotDiaUpRight){
+                    ctx.drawImage(cellShotDiaUpRight.img, cellShotDiaUpRight.x, cellShotDiaUpRight.y, cellShotDiaUpRight.width, cellShotDiaUpRight.heigth);
+                });
+            }
+            if (gohan.y < cell.y && gohan.x < cell.x){
+                cellAttackDiaUpL.forEach(function(cellShotDiaUpLeft){
+                    ctx.drawImage(cellShotDiaUpLeft.img, cellShotDiaUpLeft.x, cellShotDiaUpLeft.y, cellShotDiaUpLeft.width, cellShotDiaUpLeft.heigth);
+                });
+            }
+            kameLeft.forEach(function(kamehamehaLeft){
+                ctx.drawImage(kamehamehaLeft.img, kamehamehaLeft.x, kamehamehaLeft.y, kamehamehaLeft.width, kamehamehaLeft.heigth);
+            });
+            kameRight.forEach(function(kamehamehaRight){
+                ctx.drawImage(kamehamehaRight.img, kamehamehaRight.x, kamehamehaRight.y, kamehamehaRight.width, kamehamehaRight.heigth);
+            });
+            kameGohanLeft.forEach(function(kamehamehaGohanL){
+                ctx.drawImage(kamehamehaGohanL.img, kamehamehaGohanL.x, kamehamehaGohanL.y, kamehamehaGohanL.width, kamehamehaGohanL.heigth);
+            });
+            kameGohanRight.forEach(function(kamehamehaGohanR){
+                ctx.drawImage(kamehamehaGohanR.img, kamehamehaGohanR.x, kamehamehaGohanR.y, kamehamehaGohanR.width, kamehamehaGohanR.heigth);
+            });
+            
+            requestAnimationFrame(draw2vs1);
+        }
+
+        function cellMoveRight() {
+            cell.x += 10;
+            if (cell.x > 1260){
+                //cell.x = 0 - 1000;
+                cell.x = Math.floor(Math.random()*(1500 - 200) + 25);
+                cell.y = Math.floor(Math.random()*(600 - 250) + 25);
+                
+            }
+        }
+
+        function cellMoveLeft() {
+            cell.x -= 10;
+            if (cell.x < 260){
+                //cell.x = 0 - 1000;
+                cell.x = Math.floor(Math.random()*(1500 - 200) + 25);
+                cell.y = Math.floor(Math.random()*(600 - 250) + 25);
+                
+            }
+        }
+
+        function cellMove(){
+            if (moveLeft){
+                cellMoveLeft();
+            }
+            if (moveRight){
+                cellMoveRight();
+            }
+            else {
+                cellMoveLeft();
+            }
+        }
+
+        function endGame(){
+            if (killCell){ 
+                setTimeout(()=>{
+                    backgroundImage.img.src = 'img/boom.webp';
+                }, 1000)
+            }
+            if (killGohan || killGoku){
+                setTimeout(()=>{
+                    backgroundImage.img.src = 'img/boom.webp';
+                }, 1000)
+                
+            }
+        }
+
+        function checkKill(){
+            checkKillCell();
+            checkKillGoku();
+            checkKillGohan();
+            endGame();
+        }
+
+        function checkKillGohan() {
+            if (killGohan){
+                gohan.x = gohan.x;
+                gohan.y = gohan.y;
+                gohan.img.src = 'img/boom.webp';
+            }
+        }
+
+        function checkKillGoku() {
+            if (killGoku){
+                goku.x = goku.x;
+                goku.y = goku.y;
+                goku.img.src = 'img/boom.webp';
+            }
+        }
+
+        function checkKillCell() {
+            if (killCell){
+                cell.x = cell.x;
+                cell.y = cell.y;
+                cell.img.src = 'img/boom.webp';
+            }
+            else{
+                cellMove();
+            }
+        }
+
+        function loadImg() {
+            backgroundImage.img.src = backgroundImage.src;
+            goku.img.src = goku.src;
+            cell.img.src = cell.src;
+            gohan.img.src = gohan.src;
+
+        }         
+
+    </script>
+</head>
+<body>
+    <div id="screen"> 
+        <canvas id="desk" width="1800" height="820">
+            <div id="laterOn"></div>
+        </canvas>
+        <button id="btn" onclick="startGame()">Leon - DBZ</button>
+    </div>
+
+</body>
+</html>

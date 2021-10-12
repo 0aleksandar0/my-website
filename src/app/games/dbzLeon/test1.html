@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function addAChild () {
+        var myH2 = document.createElement('h2');
+        var myText = document.createTextNode('Eine sehr dynamische Seite');
+        myH2.appendChild(myText);
+        var Ausgabebereich = document.getElementById('main');
+        Ausgabebereich.appendChild(myH2);
+      }
+  
+      function init () {
+        var element  = document.getElementById ('button');
+        element.addEventListener ('click', addAChild);
+      }
+      
+      document.addEventListener('DOMContentLoaded', init);
+    </script>
+    
+    <main id="main">
+      <button id="button">Erzeugen Sie eine Überschrift!</button>
+    </main>
+</body>
+</html>
