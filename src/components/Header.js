@@ -29,8 +29,8 @@ function Header() {
                 <img alt="logo" src="/img/logo.png"/>
             </a>
             <Menu>
-                {projects && projects.map((project, index)=>(
-                    <a key={index} href="https://reactjs.org/">{project}</a>
+                {projects && projects.map((project, index)=>( /*using several projects from the component MyProjects*/
+                    <a key={index} href="https://reactjs.org/">{project}</a> 
                 ))}
                 {/* <a href="#">React</a>
                 <a href="#">Rest API</a>
@@ -146,7 +146,7 @@ const CustomMenu = styled(MenuOpenIcon)`
     background: white;
     border-radius: 20%;
     margin-left: 5px;
-    opacity: ${props => props.show ? '0': '1'}
+    opacity: ${props => props.show ? '0': '1'} /* use State to hide the button*/
 `
 
 const MyNav = styled.div`
@@ -163,8 +163,8 @@ const MyNav = styled.div`
     flex-direction: column;
     text-align: start;
     opacity: 0.5;
-    transform: ${props => props.show ? 'translateX(0)': 'translateX(100%)'};
-    transition: transform 0.7s ease-in;
+    transform: ${props => props.show ? 'translateX(0)': 'translateX(100%)'}; /* use State to open MyNav*/
+    transition: transform 0.7s ease-in; /*make's MyNav delayed open'/
     li {
         padding: 15px 0;
         border-bottom: 1px solid rgba(0, 0, 0, .2);
