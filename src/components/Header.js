@@ -37,7 +37,7 @@ function Header() {
                 </CloseWrapper>
                 <li><a href="#">Aleksandar's Home</a></li>
                 <li><a href="http://localhost:5500/aleks-website/src/app/games/dbzLeon/game.html" target="_blank">Aleksandar's Games</a></li>
-                <li><a href="#">Aleksandar's Turtolias</a></li>
+                <li><a href="#">Aleksandar's Turtorias</a></li>
                 <li><a href="#">Aleksandar's Projects</a></li>
                 <li><a href="#">Aleksandar's Story</a></li>
                 <li><a href="#">Aleksandar's Goals</a></li>
