@@ -48,7 +48,7 @@ const Wrap = styled.div`
     background-position: center;
     background-repeat: no-repeat;
     background-image: url('/img/Background.jpg');
-    background: wihte;
+    background: white;
     display: flex;
     flex-direction: column;
     justify-content: space-between; 
@@ -68,7 +68,8 @@ const Myh1 = styled.div`
     opacity: 0.3;
 `
 const Myp1 = styled.div`
-    opacity: 0.3;
+    color: white;
+    opacity: 0.2;
 `
 
 const Myp2 = styled.div`
@@ -88,7 +89,6 @@ const Myp4 = styled.div`
 
 const MyImg = styled.img`
     background-size: cover;
-    background-position: center;
     background-repeat: no-repeat;
     width: 30%;
     height: 50%;
