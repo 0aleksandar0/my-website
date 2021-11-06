@@ -1,22 +1,29 @@
-import React, {useState} from 'react'
-import styled from "styled-components"
-import MenuOpenIcon from '@mui/icons-material/MenuOpen';
-import Fade from 'react-reveal/Fade';
-import CloseIcon from '@mui/icons-material/Close';
-import { Translate } from '@mui/icons-material';
+import React, { useState } from "react";
+import styled from "styled-components";
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
+import Fade from "react-reveal/Fade";
+import CloseIcon from "@mui/icons-material/Close";
+import { Translate } from "@mui/icons-material";
 import { selectProject } from "../components/features/project/myProjects";
 import { useSelector } from "react-redux";
 
 function Header() {
-    const [navStatus, setNavStatus] = useState(false);
-    const projects = useSelector(selectProject);
-    console.log(projects);
-    
-    return (
-        <Container>
-            <a>
-                <img alt="logo" src="/img/logo.png"/>
+  const [navStatus, setNavStatus] = useState(false);
+  const projects = useSelector(selectProject);
+  console.log(projects);
+
+  return (
+    <Container>
+      <a>
+        <img alt="logo" src="/img/logo.png" />
+      </a>
+      <Menu>
+        {projects &&
+          projects.map((project, index) => (
+            <a key={index} href="https://reactjs.org/">
+              {project}
             </a>
+<<<<<<< Updated upstream
             <Menu>
                 {projects && projects.map((project, index)=>( /*using several projects from the component MyProjects*/
                     <a key={index} href="https://reactjs.org/">{project}</a> 
@@ -49,37 +56,86 @@ function Header() {
             
         </Container>
     )
+=======
+          ))}
+        {/* <a href="#">React</a>
+                <a href="#">Rest API</a>
+                <a href="#">Projekt TypeScript</a>
+                <a href="#">Contact</a> */}
+      </Menu>
+      <RightMenu>
+        <a href="#">Offer</a>
+        <a href="#">Account</a>
+        <CustomMenu show={navStatus} onClick={() => setNavStatus(true)} />
+      </RightMenu>
+      <MyNav show={navStatus}>
+        <CloseWrapper onClick={() => setNavStatus()}>
+          <CustomClose onClick={() => setNavStatus(false)} />
+        </CloseWrapper>
+        <li>
+          <a href="#">Aleksandar's Home</a>
+        </li>
+        <li>
+          <a href="/game" target="_blank">
+            Aleksandar's Games
+          </a>
+        </li>
+        <li>
+          <a href="#">Aleksandar's Turtorias</a>
+        </li>
+        <li>
+          <a href="#">Aleksandar's Projects</a>
+        </li>
+        <li>
+          <a href="#">Aleksandar's Story</a>
+        </li>
+        <li>
+          <a href="#">Aleksandar's Goals</a>
+        </li>
+        <li>
+          <a href="#">Aleksandar's Family</a>
+        </li>
+        {projects &&
+          projects.map((project, index) => (
+            <li id="navProjects" key={index} href="#">
+              {project}
+            </li>
+          ))}
+      </MyNav>
+    </Container>
+  );
+>>>>>>> Stashed changes
 }
 
-export default Header
+export default Header;
 
 const Container = styled.div`
-    min-height: 60px;
-    position: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1;
-    background: #1E2428;
-    opacity: 0.5;
+  min-height: 60px;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  background: #1e2428;
+  opacity: 0.5;
 
-    a {
-        opacity: 1;
-    }
-`
+  a {
+    opacity: 1;
+  }
+`;
 
 const Menu = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
 
-    a {
-        /* transition: 0.3s ease;
+  a {
+    /* transition: 0.3s ease;
         background: #3fa46a;
         color: #ffffff;
         font-size: 20px;
@@ -87,49 +143,49 @@ const Menu = styled.div`
         border-top: 4px solid #3fa46a;
         border-bottom: 4px solid #3fa46a;
         padding: 20px 0; */
-        
-        margin: 0 20px;
-        font-weight: 600px;
-        font-size: 120%;
-        text-transform: UPPERCASE;
-        padding: 0 10px;
-        flex-wrap: nowrap;
-        color: #ffffff;
 
-    }
-    a:hover {
-        transition: 0.5s ease;
+    margin: 0 20px;
+    font-weight: 600px;
+    font-size: 120%;
+    text-transform: UPPERCASE;
+    padding: 0 10px;
+    flex-wrap: nowrap;
+    color: #ffffff;
+  }
+  a:hover {
+    transition: 0.5s ease;
 
-        /* border-top: 4px solid #ffffff; */
-        border-bottom: 4px inset #ffffff;
-        font-size: 125%;
-        padding: 6px 0; 
-      }
-    @media(max-width: 1068px) {
-        display: none;
-    }
-`
+    /* border-top: 4px solid #ffffff; */
+    border-bottom: 4px inset #ffffff;
+    font-size: 125%;
+    padding: 6px 0;
+  }
+  @media (max-width: 1068px) {
+    display: none;
+  }
+`;
 
 const RightMenu = styled.div`
-    display: felx;
-    asign-items: center;
-    a {
-        font-weight: 600px;
-        text-transform: UPPERCASE;
-        margin-right: 10px;
-        color: white;
-    }
-    a:hover {
-        transition: 0.5s ease;
+  display: felx;
+  align-items: center;
+  a {
+    font-weight: 600px;
+    text-transform: UPPERCASE;
+    margin-right: 10px;
+    color: white;
+  }
+  a:hover {
+    transition: 0.5s ease;
 
-        /* border-top: 4px solid #ffffff; */
-        border-bottom: 4px inset #ffffff;
-        font-size: 125%;
-        padding: 6px 0; 
-      }
-`
+    /* border-top: 4px solid #ffffff; */
+    border-bottom: 4px inset #ffffff;
+    font-size: 125%;
+    padding: 6px 0;
+  }
+`;
 
 const CustomMenu = styled(MenuOpenIcon)`
+<<<<<<< Updated upstream
     cursor: pointer;
     display: flex;
     background: white;
@@ -137,6 +193,15 @@ const CustomMenu = styled(MenuOpenIcon)`
     margin-left: 5px;
     opacity: ${props => props.show ? '0': '1'} /* use State to hide the button*/
 `
+=======
+  cursor: pointer;
+  display: flex;
+  background: white;
+  border-radius: 20%;
+  margin-left: 5px;
+  opacity: ${(props) => (props.show ? "0" : "1")};
+`;
+>>>>>>> Stashed changes
 
 const MyNav = styled.div`
     position: fixed;
@@ -152,8 +217,14 @@ const MyNav = styled.div`
     flex-direction: column;
     text-align: start;
     opacity: 0.5;
+<<<<<<< Updated upstream
     transform: ${props => props.show ? 'translateX(0)': 'translateX(100%)'}; /* use State to open MyNav*/
     transition: transform 0.7s ease-in; /*make's MyNav delayed open'/
+=======
+    transform: ${(props) =>
+      props.show ? "translateX(0)" : "translateX(100%)"};
+    transition: transform 0.7s ease-in;
+>>>>>>> Stashed changes
     li {
         padding: 15px 0;
         border-bottom: 1px solid rgba(0, 0, 0, .2);
@@ -176,14 +247,15 @@ const MyNav = styled.div`
         padding: 15px; 0;
         border-bottom: 1px solid rgba(0, 0, 0, .2); 
     }
-`
+`;
 
 const CustomClose = styled(CloseIcon)`
-    cursor: pointer;
-    background: white;
-`
+  cursor: pointer;
+  background: white;
+`;
 
 const CloseWrapper = styled.div`
+<<<<<<< Updated upstream
     display: flex;
     justify-content: flex-end;
 `
@@ -200,3 +272,8 @@ const CloseWrapper = styled.div`
         }
     });
 }*/
+=======
+  display: flex;
+  justify-content: flex-end;
+`;
+>>>>>>> Stashed changes
